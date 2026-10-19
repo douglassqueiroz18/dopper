@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doper - Sistemas de Gestão e Sites</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Embedded Clean Compiled SCSS/CSS Architecture -->
+    <style>
+        /* ==========================================================================
+           SCSS VARIABLES & DESIGN TOKENS
+           ========================================================================== */
+        :root {
+            --bg-dark: #080b11;
+            --bg-card: rgba(18, 24, 38, 0.7);
+            --bg-card-hover: rgba(26, 35, 56, 0.8);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 242, 254, 0.3);
+
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+
+            --primary: #00f2fe;
+            --primary-glow: rgba(0, 242, 254, 0.4);
+            --secondary: #4facfe;
+            --accent-purple: #7f00ff;
+            --accent-pink: #e100ff;
+
+            --gradient-primary: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --gradient-accent: linear-gradient(135deg, #7f00ff 0%, #e100ff 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(127,0,255,0.15) 100%);
+
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --container-max: 1200px;
+        }
+
+        /* ==========================================================================
+           RESET & BASE STYLES
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ambient Glow Backgrounds */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 242, 254, 0.12);
+        }
+
+        .glow-2 {
+            top: 40%;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: rgba(127, 0, 255, 0.1);
+        }
+
+        .glow-3 {
+            bottom: 10%;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 242, 254, 0.08);
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--text-main);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-alt {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        /* ==========================================================================
+           BUTTONS & COMPONENTS
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.85rem 1.8rem;
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: #040914;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.9rem;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        /* Card Component (Glassmorphism) */
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-glow);
+            background: var(--bg-card-hover);
+            transform: translateY(-5px);
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem auto;
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem;
+            margin: 1rem 0 0.8rem 0;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* ==========================================================================
+           HEADER / NAVIGATION
+           ========================================================================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.2rem 0;
+            transition: var(--transition);
+        }
+
+        .header.scrolled {
+            background: rgba(8, 11, 17, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+
+        .logo-badge {
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           HERO SECTION
+           ========================================================================== */
+        .hero {
+            padding: 10rem 0 6rem 0;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.2rem;
+            margin: 1.2rem 0;
+            letter-spacing: -1px;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2.2rem;
+            max-width: 540px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Dashboard/Mockup Graphic */
+        .hero-graphic {
+            position: relative;
+        }
+
+        .mockup-window {
+            background: #0d121f;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .mockup-header {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .mockup-body {
+            padding: 1.5rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .dash-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .dash-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .metric-val {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 0.3rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-placeholder {
+            height: 110px;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--gradient-primary);
+            opacity: 0.3;
+            border-radius: 4px 4px 0 0;
+            transition: var(--transition);
+        }
+
+        .chart-bar.active {
+            opacity: 1;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        /* Tech Floating Badge Overlay */
+        .floating-badge {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            background: rgba(18, 24, 38, 0.9);
+            border: 1px solid var(--primary);
+            padding: 1rem 1.2rem;
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .floating-badge i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .floating-badge-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floating-badge-text strong {
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .floating-badge-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================================================
+           SOLUTIONS / SERVICES SECTION
+           ========================================================================== */
+        .solutions {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+        }
+
+        .solution-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: var(--radius-md);
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .solution-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.2rem;
+        }
+
+        .solution-features li {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .solution-features li i {
+            color: var(--primary);
+            font-size: 0.75rem;
+        }
+
+        /* ==========================================================================
+           WHY DOPER? (DIFFERENTIALS)
+           ========================================================================== */
+        .differentials {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, rgba(8,11,17,0) 0%, rgba(18,24,38,0.4) 50%, rgba(8,11,17,0) 100%);
+        }
+
+        .differentials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .diff-card {
+            text-align: center;
+            padding: 2.5rem 1.8rem;
+        }
+
+        .diff-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 50%;
+            background: var(--gradient-glow);
+            border: 1px solid var(--border-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--primary);
+        }
+
+        .diff-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .diff-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================================================
+           CONTACT / CTA SECTION
+           ========================================================================== */
+        .contact {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, rgba(18,24,38,0.9) 0%, rgba(13,18,31,0.95) 100%);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 3.5rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: var(--gradient-primary);
+            opacity: 0.05;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .contact-info h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-benefits {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .contact-benefits li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .contact-benefits li i {
+            color: var(--primary);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        /* Success Message Box */
+        .form-message {
+            display: none;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            background: rgba(39, 201, 63, 0.1);
+            border: 1px solid rgba(39, 201, 63, 0.3);
+            color: #27c93f;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
+        .footer {
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0 2rem 0;
+            background: rgba(5, 7, 12, 0.8);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            max-width: 320px;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-main);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: rgba(0, 242, 254, 0.05);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN (MEDIA QUERIES)
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .solutions-grid, .differentials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-box {
+                grid-template-columns: 1fr;
+                padding: 2.5rem 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(13, 18, 31, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+                transition: var(--transition);
+                border-left: 1px solid var(--border-color);
+                z-index: 999;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+                z-index: 1000;
+            }
+
+            .hero-content h1 {
+                font-size: 2.3rem;
+            }
+
+            .solutions-grid, .differentials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glowing Accents -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- 1. HEADER / NAVIGATION -->
+    <header class="header" id="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <span class="logo-text">Doper<span style="color: var(--primary);">.</span></span>
+                <span class="logo-badge">Sistemas & Sites</span>
+            </a>
+
+            <button class="mobile-toggle" id="menuToggle" aria-label="Abrir Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#solucoes" class="nav-link">Soluções</a></li>
+                <li><a href="#diferenciais" class="nav-link">Diferenciais</a></li>
+                <li><a href="#contato" class="nav-link">Contato</a></li>
+                <li>
+                    <a href="#contato" class="btn btn-primary" style="padding: 0.6rem 1.4rem; font-size: 0.85rem;">
+                        Falar com Especialista
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="badge">
+                    <span class="badge-dot"></span> Inovação & Simplicidade
+                </div>
+                <h1>
+                    Transforme a gestão do seu negócio com <span class="gradient-text">sistemas inteligentes</span> e sites de alta conversão.
+                </h1>
+                <p>
+                    Elimine gargalos operacionais e amplie sua presença digital. Desenvolvemos soluções tecnológicas práticas, diretas ao ponto e sob medida para alavancar sua empresa.
+                </p>
+                <div class="hero-cta">
+                    <a href="#contato" class="btn btn-primary">
+                        Solicitar Orçamento <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#solucoes" class="btn btn-secondary">
+                        Ver Soluções
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-graphic">
+                <div class="mockup-window">
+                    <div class="mockup-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        <span style="font-size: 0.75rem; color: var(--text-dim); margin-left: 0.5rem;">doper-dashboard-v2.1</span>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="dash-row">
+                            <div class="dash-card">
+                                <div class="metric-label">Desempenho Geral</div>
+                                <div class="metric-val gradient-text">+248%</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="metric-label">Tempo Economizado</div>
+                                <div class="metric-val">18h/sem</div>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="metric-label">Fluxo de Dados & Métricas</div>
+                            <div class="chart-placeholder">
+                                <div class="chart-bar" style="height: 40%;"></div>
+                                <div class="chart-bar" style="height: 65%;"></div>
+                                <div class="chart-bar" style="height: 50%;"></div>
+                                <div class="chart-bar active" style="height: 85%;"></div>
+                                <div class="chart-bar" style="height: 70%;"></div>
+                                <div class="chart-bar active" style="height: 95%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floating-badge">
+                    <i class="fa-solid fa-bolt"></i>
+                    <div class="floating-badge-text">
+                        <strong>Interface Ultra Rápida</strong>
+                        <span>Performance & Zero Complicação</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. SOLUÇÕES / SERVIÇOS -->
+    <section class="solutions" id="solucoes">
+        <div class="container">
+            <div class="section-header">
+                <div class="badge">Nossas Soluções</div>
+                <h2>Tecnologia focada em eficiência e resultado</h2>
+                <p>Projetos desenvolvidos para resolver problemas reais com simplicidade e precisão tecnológica.</p>
+            </div>
+
+            <div class="solutions-grid">
+                <!-- Card 1 -->
+                <div class="glass-card solution-card">
+                    <div>
+                        <div class="icon-box">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3>Sistemas de Gestão Sob Medida</h3>
+                        <p>ERPs, CRMs e Dashboards administrativos desenhados para a rotina exata da sua empresa.</p>
+                    </div>
+                    <ul class="solution-features">
+                        <li><i class="fa-solid fa-check"></i> Controle financeiro e de estoque</li>
+                        <li><i class="fa-solid fa-check"></i> Painéis intuitivos e fáceis de usar</li>
+                        <li><i class="fa-solid fa-check"></i> Relatórios em tempo real</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card solution-card">
+                    <div>
+                        <div class="icon-box">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3>Sites & Web Apps de Performance</h3>
+                        <p>Plataformas institucionais, Landing Pages de alta conversão e e-Commerces otimizados.</p>
+                    </div>
+                    <ul class="solution-features">
+                        <li><i class="fa-solid fa-check"></i> Design moderno e responsivo</li>
+                        <li><i class="fa-solid fa-check"></i> Otimização extrema para SEO</li>
+                        <li><i class="fa-solid fa-check"></i> Foco total em conversão de leads</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card solution-card">
+                    <div>
+                        <div class="icon-box">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3>Automações & Integrações</h3>
+                        <p>Conecte seus sistemas existentes e automatize tarefas repetitivas com inteligência.</p>
+                    </div>
+                    <ul class="solution-features">
+                        <li><i class="fa-solid fa-check"></i> Integração de APIs e gateways</li>
+                        <li><i class="fa-solid fa-check"></i> Automatização de fluxos de trabalho</li>
+                        <li><i class="fa-solid fa-check"></i> Redução drástica de erros humanos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. POR QUE A DOPER? (DIFERENCIAIS) -->
+    <section class="differentials" id="diferenciais">
+        <div class="container">
+            <div class="section-header">
+                <div class="badge">Por Que a Doper?</div>
+                <h2>Pensamento simples, prático e limpo</h2>
+                <p>Não criamos complexidade desnecessária. Entregamos o que seu negócio precisa para crescer.</p>
+            </div>
+
+            <div class="differentials-grid">
+                <div class="glass-card diff-card">
+                    <div class="diff-icon">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3>Design Limpo & Intuitivo</h3>
+                    <p>Sistemas e sites que qualquer pessoa da sua equipe aprende a usar em minutos. Zero burocracia.</p>
+                </div>
+
+                <div class="glass-card diff-card">
+                    <div class="diff-icon">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <h3>Velocidade Extrema</h3>
+                    <p>Código limpo e infraestrutura moderna garantem carregamento instantâneo em qualquer dispositivo.</p>
+                </div>
+
+                <div class="glass-card diff-card">
+                    <div class="diff-icon">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h3>Suporte Prático e Dedicado</h3>
+                    <p>Atendimento humanizado, sem tickets infinitos ou respostas automáticas evasivas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CONTATO / CTA FINAL -->
+    <section class="contact" id="contato">
+        <div class="container">
+            <div class="contact-box">
+                <div class="contact-info">
+                    <div class="badge">Vamos Conversar</div>
+                    <h2>Pronto para elevar o nível da sua empresa?</h2>
+                    <p>Preencha os dados e um especialista em soluções tecnológicas entrará em contato para entender sua necessidade.</p>
+                    
+                    <ul class="contact-benefits">
+                        <li><i class="fa-solid fa-circle-check"></i> Atendimento direto sem intermediários</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Diagnóstico inicial gratuito</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Proposta personalizada para sua demanda</li>
+                    </ul>
+                </div>
+
+                <form class="contact-form" id="leadForm">
+                    <div class="form-group">
+                        <label for="name">Nome completo</label>
+                        <input type="text" id="name" class="form-input" placeholder="Seu nome ou da sua empresa" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-mail corporativo</label>
+                        <input type="email" id="email" class="form-input" placeholder="seuemail@empresa.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interest">Qual o seu interesse principal?</label>
+                        <select id="interest" class="form-input" style="background: #0d121f;" required>
+                            <option value="sistema">Sistema de Gestão Sob Medida</option>
+                            <option value="site">Site ou Landing Page</option>
+                            <option value="automacao">Automação de Processos</option>
+                            <option value="outro">Outros / Consultoria</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Mensagem (opcional)</label>
+                        <textarea id="message" class="form-input" placeholder="Conte brevemente sobre seu projeto..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Enviar Mensagem <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+
+                    <div class="form-message" id="formSuccess">
+                        <i class="fa-solid fa-circle-check"></i> Mensagem enviada com sucesso! Entraremos em contato em breve.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. RODAPÉ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-text">Doper<span style="color: var(--primary);">.</span></span>
+                    </a>
+                    <p>Sistemas de gestão e desenvolvimento web orientados a eficiência, velocidade e usabilidade limpa.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#solucoes">Soluções</a></li>
+                        <li><a href="#diferenciais">Diferenciais</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Soluções</h4>
+                    <ul>
+                        <li><a href="#solucoes">Sistemas ERP/CRM</a></li>
+                        <li><a href="#solucoes">Sites Institucionais</a></li>
+                        <li><a href="#solucoes">Landing Pages</a></li>
+                        <li><a href="#solucoes">Integrações de API</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Doper - Sistemas de Gestão e Sites. Todos os direitos reservados.</p>
+                <p>Tecnologia com propósito e simplicidade.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVITY SCRIPT -->
+    <script>
+        // Header Blur effect on Scroll
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // Contact Form Handlers (Without Alert)
+        const leadForm = document.getElementById('leadForm');
+        const formSuccess = document.getElementById('formSuccess');
+
+        leadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            formSuccess.style.display = 'block';
+            leadForm.reset();
+
+            setTimeout(() => {
+                formSuccess.style.display = 'none';
+            }, 6000);
+        });
+    </script>
+</body>
+</html>
